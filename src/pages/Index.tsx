@@ -2,9 +2,11 @@ import { useState } from 'react';
 import Icon from '@/components/ui/icon';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 export default function Index() {
   const [activeSection, setActiveSection] = useState('home');
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const characters = [
     { 
@@ -208,7 +210,8 @@ export default function Index() {
               {galleryImages.map((image, index) => (
                 <div 
                   key={index}
-                  className="aspect-[4/3] overflow-hidden rounded-lg border border-primary/30 hover:border-primary transition-all duration-300 group"
+                  className="aspect-[4/3] overflow-hidden rounded-lg border border-primary/30 hover:border-primary transition-all duration-300 group cursor-pointer"
+                  onClick={() => setSelectedImage(image)}
                 >
                   <img 
                     src={image} 
@@ -221,6 +224,26 @@ export default function Index() {
           </section>
         )}
       </main>
+
+      <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
+        <DialogContent className="max-w-4xl bg-background border-primary/30">
+          <div className="relative">
+            <img 
+              src={selectedImage || ''} 
+              alt="Full size" 
+              className="w-full h-auto rounded-lg"
+            />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-2 right-2 bg-background/80 hover:bg-background neon-border"
+              onClick={() => setSelectedImage(null)}
+            >
+              <Icon name="X" size={24} />
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <footer className="bg-card border-t border-primary/30 mt-20 py-8">
         <div className="container mx-auto px-4 text-center">
